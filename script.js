@@ -1,55 +1,45 @@
 const API_URL = "https://script.google.com/macros/s/AKfycbyvZ90Wg_7uvCWmyCCCtJgRmzWYM12JHZ0Hbypx6NGDJntIoFowYXLpT_kFLpDeypuN/exec";
 
-// VERIFICA LOGIN AO ABRIR O SITE
+// 1. ISSO AQUI FAZ VOCÊ VOLTAR PARA A CONTA AUTOMATICAMENTE
 window.onload = () => {
-    const usuarioLogado = localStorage.getItem('logado_acervo');
-    if (usuarioLogado === 'sim') {
-        entrarNoPainel();
+    const logado = localStorage.getItem('sessao_ativa');
+    if (logado === 'sim') {
+        document.getElementById('auth-screen').style.display = 'none';
+        document.getElementById('main-site').style.display = 'block';
+        carregarGaleria();
     }
 };
 
-function entrarNoPainel() {
-    document.getElementById('auth-screen').style.display = 'none';
-    document.getElementById('main-site').style.display = 'block';
-    carregarGaleria();
-}
-
 function sair() {
-    localStorage.removeItem('logado_acervo'); // Limpa a memória para sair
+    localStorage.removeItem('sessao_ativa');
     location.reload();
 }
 
 async function carregarGaleria() {
     const galeria = document.getElementById('galeria');
-    galeria.innerHTML = "<p>Buscando suas mídias...</p>";
+    galeria.innerHTML = "Carregando acervo...";
     
     try {
         const res = await fetch(API_URL);
         const dados = await res.json();
         galeria.innerHTML = "";
 
-        if (dados.length === 0) {
-            galeria.innerHTML = "<p>Sua nuvem está vazia.</p>";
-            return;
-        }
-
         dados.forEach(item => {
             const div = document.createElement('div');
             div.className = "card-midia";
             
-            // LINK DE VISUALIZAÇÃO DIRETA (UC?ID=...)
-            const linkVisualizacao = item.url.replace("view?usp=sharing", "view");
+            // TRANSFORMA O LINK DO DRIVE EM LINK DIRETO PARA NÃO PISCAR
+            let linkDireto = item.url.replace("file/d/", "uc?export=view&id=").replace("/view?usp=sharing", "").replace("/view", "");
 
             if (item.tipo.includes('video')) {
-                div.innerHTML = `<video src="${linkVisualizacao}" controls></video>`;
+                div.innerHTML = `<video src="${linkDireto}" controls></video>`;
             } else {
-                // TAG DE IMAGEM COM LOADING LAZY PARA NÃO BUGAR
-                div.innerHTML = `<img src="${linkVisualizacao}" loading="lazy" onerror="this.src='https://via.placeholder.com/300x200?text=Erro+no+Link+do+Drive'">`;
+                div.innerHTML = `<img src="${linkDireto}" onerror="this.src='https://via.placeholder.com/300?text=Erro+no+Google+Drive'">`;
             }
             galeria.appendChild(div);
         });
     } catch (e) {
-        galeria.innerHTML = "<p>Erro ao carregar galeria.</p>";
+        galeria.innerHTML = "Erro ao conectar com a nuvem.";
     }
 }
 
@@ -63,10 +53,10 @@ function processar(acao) {
         body: JSON.stringify({ acao, email, senha })
     }).then(() => {
         if(acao === 'login') {
-            localStorage.setItem('logado_acervo', 'sim'); // SALVA QUE VOCÊ ESTÁ LOGADO
-            entrarNoPainel();
+            localStorage.setItem('sessao_ativa', 'sim'); // SALVA O LOGIN NO CELULAR
+            location.reload(); // Recarrega para entrar direto
         } else {
-            alert("Cadastro realizado!");
+            alert("Cadastro feito!");
             location.reload();
         }
     });
@@ -77,7 +67,7 @@ function enviarArquivo() {
     const status = document.getElementById('status-upload');
     const reader = new FileReader();
     status.innerText = "🚀 Enviando...";
-
+    
     reader.onload = function(e) {
         const payload = {
             acao: 'upload_direto',
@@ -88,7 +78,7 @@ function enviarArquivo() {
         };
         fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) })
         .then(() => {
-            status.innerText = "✅ Sucesso!";
+            status.innerText = "✅ Salvo!";
             setTimeout(() => { status.innerText = ""; carregarGaleria(); }, 2000);
         });
     };
