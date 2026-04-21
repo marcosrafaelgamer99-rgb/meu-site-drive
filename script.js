@@ -1,45 +1,43 @@
-const URL_PONTE = "SUA_URL_AQUI"; // Coloque o seu link /exec aqui
+const API = "https://script.google.com/macros/s/AKfycbyvZ90Wg_7uvCWmyCCCtJgRmzWYM12JHZ0Hbypx6NGDJntIoFowYXLpT_kFLpDeypuN/exec";
+let userEmail = "";
 
-function showTab(tipo) {
-    if(tipo === 'login') {
-        document.getElementById('form-login').style.display = 'block';
-        document.getElementById('form-cadastro').style.display = 'none';
-        document.getElementById('tab-login').classList.add('active');
-        document.getElementById('tab-cadastro').classList.remove('active');
-    } else {
-        document.getElementById('form-login').style.display = 'none';
-        document.getElementById('form-cadastro').style.display = 'block';
-        document.getElementById('tab-cadastro').classList.add('active');
-        document.getElementById('tab-login').classList.remove('active');
-    }
+function switchTab(t) {
+    document.getElementById('form-login').style.display = t=='login'?'block':'none';
+    document.getElementById('form-cad').style.display = t=='cadastro'?'block':'none';
+    document.getElementById('tab-l').className = t=='login'?'active':'';
+    document.getElementById('tab-c').className = t=='cadastro'?'active':'';
 }
 
-function auth(tipo) {
-    let payload = {};
-    if(tipo === 'login') {
-        payload = {
-            acao: 'login',
-            email: document.getElementById('email-login').value,
-            senha: document.getElementById('pass-login').value
-        };
-    } else {
-        payload = {
-            acao: 'cadastro',
-            nome: document.getElementById('nome-cad').value,
-            email: document.getElementById('email-cad').value,
-            senha: document.getElementById('pass-cad').value
-        };
-    }
+function processar(tipo) {
+    const email = tipo=='login'?document.getElementById('email-l').value:document.getElementById('email-c').value;
+    const pass = tipo=='login'?document.getElementById('pass-l').value:document.getElementById('pass-c').value;
+    const nome = document.getElementById('nome-c').value;
 
-    fetch(URL_PONTE, {
-        method: 'POST',
-        mode: 'no-cors',
-        body: JSON.stringify(payload)
-    }).then(() => {
-        alert(tipo === 'login' ? "Entrando..." : "Cadastro enviado! Tente logar.");
-        if(tipo === 'login') {
-            document.getElementById('auth-area').style.display = 'none';
-            document.getElementById('site-content').style.display = 'block';
+    const payload = { acao: tipo, email: email, senha: pass, nome: nome };
+    
+    fetch(API, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) })
+    .then(() => {
+        if(tipo == 'login') {
+            userEmail = email;
+            document.getElementById('auth-screen').style.display = 'none';
+            document.getElementById('main-site').style.display = 'block';
+            document.getElementById('user-display').innerText = "Olá!";
+        } else {
+            alert("Cadastrado! Agora faça login.");
+            switchTab('login');
         }
     });
+}
+
+function enviar(acao) {
+    const payload = {
+        acao: acao,
+        email: userEmail,
+        conteudo: document.getElementById('nota-txt').value,
+        link: document.getElementById('midia-link').value,
+        tipo: document.getElementById('midia-tipo').value
+    };
+
+    fetch(API, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) })
+    .then(() => alert("Enviado com sucesso!"));
 }

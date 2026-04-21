@@ -7,38 +7,55 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="auth-area">
+    <div id="auth-screen">
         <div class="card">
             <div class="tabs">
-                <button onclick="showTab('login')" id="tab-login" class="active">Entrar</button>
-                <button onclick="showTab('cadastro')" id="tab-cadastro">Cadastrar</button>
+                <button id="tab-l" class="active" onclick="switchTab('login')">Entrar</button>
+                <button id="tab-c" onclick="switchTab('cadastro')">Cadastrar</button>
             </div>
-
             <div id="form-login">
-                <h2>Bem-vindo de volta</h2>
-                <input type="email" id="email-login" placeholder="E-mail">
-                <input type="password" id="pass-login" placeholder="Senha">
-                <button class="btn-main" onclick="auth('login')">Acessar Conta</button>
+                <input type="email" id="email-l" placeholder="E-mail">
+                <input type="password" id="pass-l" placeholder="Senha">
+                <button class="btn-main" onclick="processar('login')">Entrar</button>
             </div>
-
-            <div id="form-cadastro" style="display:none;">
-                <h2>Criar nova conta</h2>
-                <input type="text" id="nome-cad" placeholder="Seu Nome">
-                <input type="email" id="email-cad" placeholder="Seu E-mail">
-                <input type="password" id="pass-cad" placeholder="Crie uma Senha">
-                <button class="btn-main" onclick="auth('cadastro')">Finalizar Cadastro</button>
+            <div id="form-cad" style="display:none">
+                <input type="text" id="nome-c" placeholder="Nome">
+                <input type="email" id="email-c" placeholder="E-mail">
+                <input type="password" id="pass-c" placeholder="Senha">
+                <button class="btn-main" onclick="processar('cadastro')">Criar Conta</button>
             </div>
         </div>
     </div>
 
-    <div id="site-content" style="display:none;">
+    <div id="main-site" style="display:none">
         <header>
-            <span id="user-name"></span>
-            <button onclick="location.reload()">Sair</button>
+            <h2 id="user-display">Painel</h2>
+            <button class="btn-sair" onclick="location.reload()">Sair</button>
         </header>
-        <div class="grid" id="galeria"></div>
-    </div>
 
+        <div class="container">
+            <section class="box">
+                <h3>📝 Bloco de Notas</h3>
+                <textarea id="nota-txt" placeholder="Escreva algo..."></textarea>
+                <button class="btn-main" onclick="enviar('salvar_nota')">Salvar Nota</button>
+            </section>
+
+            <section class="box">
+                <h3>📁 Upload de Link</h3>
+                <input type="text" id="midia-link" placeholder="Link do GIF/Vídeo/Imagem">
+                <select id="midia-tipo">
+                    <option value="imagem">Imagem/GIF</option>
+                    <option value="video">Vídeo</option>
+                </select>
+                <button class="btn-main" onclick="enviar('adicionar_midia')">Postar Agora</button>
+            </section>
+
+            <section>
+                <h3>🖼️ Minha Galeria</h3>
+                <div class="grid" id="galeria"></div>
+            </section>
+        </div>
+    </div>
     <script src="script.js"></script>
 </body>
 </html>
