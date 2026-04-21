@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Acervo 2TB</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="login-area">
+        <div class="card">
+            <h1>Acesso Privado</h1>
+            <input type="text" id="email" placeholder="E-mail de Usuário">
+            <input type="password" id="senha" placeholder="Senha">
+            <button onclick="entrar()">Entrar</button>
+        </div>
+    </div>
+
+    <div id="conteudo-area" style="display: none;">
+        <header>
+            <h2 id="boas-vindas">Bem-vindo</h2>
+            <button onclick="location.reload()">Sair</button>
+        </header>
+        <div class="grid" id="galeria">
+            </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
