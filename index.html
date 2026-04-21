@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meu Acervo Cloud</title>
+    <title>Meu Acervo Pro | 2TB Cloud</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 </head>
 <body>
 
@@ -16,37 +17,46 @@
             </div>
             
             <div id="form-login">
-                <input type="email" id="email-l" placeholder="Teu E-mail">
-                <input type="password" id="pass-l" placeholder="Tua Senha">
-                <button class="btn-main" onclick="processar('login')">Aceder ao Acervo</button>
+                <h2>Acessar Acervo</h2>
+                <input type="email" id="email-l" placeholder="Seu E-mail">
+                <input type="password" id="pass-l" placeholder="Sua Senha">
+                <button class="btn-main" onclick="processar('login')">Entrar agora</button>
             </div>
 
             <div id="form-cad" style="display:none">
-                <input type="text" id="nome-c" placeholder="Nome">
-                <input type="email" id="email-c" placeholder="E-mail">
-                <input type="password" id="pass-c" placeholder="Senha">
-                <button class="btn-main" onclick="processar('cadastro')">Criar Conta</button>
+                <h2>Criar Conta</h2>
+                <input type="text" id="nome-c" placeholder="Como quer ser chamado?">
+                <input type="email" id="email-c" placeholder="E-mail para login">
+                <input type="password" id="pass-c" placeholder="Crie uma senha forte">
+                <button class="btn-main" onclick="processar('cadastro')">Finalizar Cadastro</button>
             </div>
         </div>
     </div>
 
     <div id="main-site" style="display:none">
         <header>
-            <h2>Meu Acervo</h2>
-            <button class="btn-sair" onclick="sair()">Sair</button>
+            <div class="logo">☁️ Meu Acervo <span>PRO</span></div>
+            <button class="btn-sair" onclick="sair()">Sair da Conta</button>
         </header>
 
         <div class="container">
-            <div class="upload-section">
+            <div class="upload-area">
+                <h3>Gerenciar Meus 2TB</h3>
+                <p>Envie imagens, vídeos ou GIFs diretamente para o Drive.</p>
+                
                 <label class="btn-upload">
-                    <span>+ Enviar para os 2TB</span>
-                    <input type="file" id="input-arquivo" hidden onchange="enviarArquivo()">
+                    <span>+ Adicionar Nova Mídia</span>
+                    <input type="file" id="input-arquivo" accept="image/*,video/*,.gif" hidden onchange="enviarArquivo()">
                 </label>
-                <p id="status-upload"></p>
+                
+                <div id="status-upload" class="status-msg"></div>
             </div>
 
-            <div class="grid" id="galeria">
-                </div>
+            <section class="gallery-section">
+                <h3>Minha Galeria</h3>
+                <div class="grid" id="galeria">
+                    </div>
+            </section>
         </div>
     </div>
 
