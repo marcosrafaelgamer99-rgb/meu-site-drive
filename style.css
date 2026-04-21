@@ -1,103 +1,218 @@
+/* Configurações de Cores e Variáveis */
 :root {
     --primary: #3d5afe;
+    --primary-hover: #536dfe;
     --bg: #050505;
     --card-bg: #121212;
+    --input-bg: #1a1a1a;
     --text: #ffffff;
+    --text-dim: #a0a0a0;
+    --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
+/* Reset Geral Otimizado */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+}
 
 body {
     background-color: var(--bg);
     color: var(--text);
-    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     line-height: 1.6;
+    overflow-x: hidden;
 }
 
-/* Container de Login */
-#login-area {
+/* Container de Autenticação (Login/Cadastro) */
+#auth-area {
     height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 20px;
+    background: radial-gradient(circle at center, #1a1a1a 0%, #050505 100%);
 }
 
 .card {
     background: var(--card-bg);
-    padding: 2rem;
-    border-radius: 24px;
-    border: 1px solid #333;
+    padding: 2.5rem;
+    border-radius: 28px;
+    border: 1px solid #222;
     width: 100%;
     max-width: 400px;
-    text-align: center;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+    animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Abas (Tabs) Modernas */
+.tabs {
+    display: flex;
+    background: var(--input-bg);
+    padding: 6px;
+    border-radius: 16px;
+    margin-bottom: 30px;
+}
+
+.tabs button {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 12px;
+    background: transparent;
+    color: var(--text-dim);
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.tabs button.active {
+    background: var(--primary);
+    color: white;
+    box-shadow: 0 4px 12px rgba(61, 90, 254, 0.3);
+}
+
+/* Formulários */
+h2 {
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    font-weight: 700;
 }
 
 input {
     width: 100%;
-    padding: 14px;
-    margin: 12px 0;
-    border-radius: 12px;
-    border: 1px solid #444;
-    background: #1a1a1a;
+    padding: 16px;
+    margin: 8px 0;
+    border-radius: 14px;
+    border: 1px solid #333;
+    background: var(--input-bg);
     color: white;
     font-size: 16px;
+    transition: var(--transition);
 }
 
-button {
+input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(61, 90, 254, 0.1);
+}
+
+.btn-main {
     width: 100%;
-    padding: 14px;
+    padding: 16px;
+    margin-top: 15px;
     background: var(--primary);
     color: white;
     border: none;
-    border-radius: 12px;
-    font-weight: 600;
+    border-radius: 14px;
+    font-size: 16px;
+    font-weight: 700;
     cursor: pointer;
-    transition: transform 0.2s, background 0.2s;
+    transition: var(--transition);
 }
 
-button:active { transform: scale(0.98); }
+.btn-main:hover {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+}
 
-/* Layout da Galeria */
+.btn-main:active {
+    transform: translateY(0);
+}
+
+/* Área do Conteúdo (Pós-Login) */
 header {
-    padding: 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: rgba(18, 18, 18, 0.8);
-    backdrop-filter: blur(10px);
+    padding: 15px 5%;
+    background: rgba(10, 10, 10, 0.8);
+    backdrop-filter: blur(15px);
+    border-bottom: 1px solid #222;
     position: sticky;
     top: 0;
-    z-index: 1000;
+    z-index: 100;
 }
 
+.btn-sair {
+    padding: 8px 16px;
+    background: #e53935;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+/* Grid de Mídia Otimizado */
 .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 20px;
-    padding: 20px;
+    padding: 25px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.card-midia {
+    background: var(--card-bg);
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid #222;
+    transition: var(--transition);
+}
+
+.card-midia:hover {
+    transform: scale(1.02);
+    border-color: var(--primary);
+}
+
+.card-midia img, .card-midia video {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+    background: #000;
+}
+
+/* Bloco de Notas Integrado */
+.notas-container {
+    padding: 25px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+textarea {
+    width: 100%;
+    height: 200px;
+    background: var(--card-bg);
+    border: 1px solid #333;
+    border-radius: 15px;
+    padding: 15px;
+    color: white;
+    font-size: 16px;
+    resize: none;
 }
 
 /* Responsividade para Celular */
 @media (max-width: 600px) {
     .grid {
-        grid-template-columns: 1fr; /* No celular fica uma coluna só */
+        grid-template-columns: 1fr;
+        padding: 15px;
     }
-    .card-midia {
-        margin-bottom: 10px;
+    
+    .card {
+        padding: 1.5rem;
     }
-}
-
-.card-midia {
-    background: var(--card-bg);
-    border-radius: 16px;
-    overflow: hidden;
-    border: 1px solid #222;
-}
-
-.card-midia img, .card-midia video {
-    width: 100%;
-    display: block;
-    object-fit: cover;
+    
+    header h2 {
+        font-size: 1.2rem;
+    }
 }
