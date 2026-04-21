@@ -1,18 +1,41 @@
-const URL_PONTE = "https://script.google.com/macros/s/AKfycbyvZ90Wg_7uvCWmyCCCtJgRmzWYM12JHZ0Hbypx6NGDJntIoFowYXLpT_kFLpDeypuN/exec";
+const URL_PONTE = "SUA_URL_DA_PONTE_AQUI";
 
 function entrar() {
     const email = document.getElementById('email').value;
     const senha = document.getElementById('senha').value;
 
-    // Envia os dados para o Google Apps Script
+    // Feedback visual de carregamento
+    const btn = document.querySelector('button');
+    btn.innerText = "Entrando...";
+
     fetch(URL_PONTE, {
         method: 'POST',
-        mode: 'no-cors', 
+        mode: 'no-cors',
         body: JSON.stringify({ email: email, senha: senha })
     }).then(() => {
-        // Mostra a área logada
         document.getElementById('login-area').style.display = 'none';
-        document.getElementById('conteudo-area').style.display = 'block';
-        console.log("Conectado à planilha com sucesso!");
-    }).catch(err => alert("Erro na conexão."));
+        document.getElementById('site-content').style.display = 'block';
+        carregarConteudo();
+    }).catch(() => alert("Erro ao conectar."));
+}
+
+function carregarConteudo() {
+    const galeria = document.getElementById('galeria');
+    // Exemplo de como o código vai "desenhar" os itens no site
+    // Você deve alimentar a sua planilha com os links do Drive
+    const itensDeExemplo = [
+        {tipo: 'gif', url: 'LINK_DO_SEU_GIF_NO_DRIVE'},
+        {tipo: 'video', url: 'LINK_DO_SEU_VIDEO_NO_DRIVE'}
+    ];
+
+    itensDeExemplo.forEach(item => {
+        let html = `<div class="card-midia">`;
+        if(item.tipo === 'video') {
+            html += `<video src="${item.url}" controls></video>`;
+        } else {
+            html += `<img src="${item.url}" loading="lazy">`; // loading lazy deixa o site super leve
+        }
+        html += `</div>`;
+        galeria.innerHTML += html;
+    });
 }
