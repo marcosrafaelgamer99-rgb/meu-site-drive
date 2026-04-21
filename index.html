@@ -3,26 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meu Acervo 2TB</title>
+    <title>Meu Acervo Pro</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="login-area">
+    <div id="auth-area">
         <div class="card">
-            <h1>Acesso Privado</h1>
-            <input type="text" id="email" placeholder="E-mail de Usuário">
-            <input type="password" id="senha" placeholder="Senha">
-            <button onclick="entrar()">Entrar</button>
+            <div class="tabs">
+                <button onclick="showTab('login')" id="tab-login" class="active">Entrar</button>
+                <button onclick="showTab('cadastro')" id="tab-cadastro">Cadastrar</button>
+            </div>
+
+            <div id="form-login">
+                <h2>Bem-vindo de volta</h2>
+                <input type="email" id="email-login" placeholder="E-mail">
+                <input type="password" id="pass-login" placeholder="Senha">
+                <button class="btn-main" onclick="auth('login')">Acessar Conta</button>
+            </div>
+
+            <div id="form-cadastro" style="display:none;">
+                <h2>Criar nova conta</h2>
+                <input type="text" id="nome-cad" placeholder="Seu Nome">
+                <input type="email" id="email-cad" placeholder="Seu E-mail">
+                <input type="password" id="pass-cad" placeholder="Crie uma Senha">
+                <button class="btn-main" onclick="auth('cadastro')">Finalizar Cadastro</button>
+            </div>
         </div>
     </div>
 
-    <div id="conteudo-area" style="display: none;">
+    <div id="site-content" style="display:none;">
         <header>
-            <h2 id="boas-vindas">Bem-vindo</h2>
+            <span id="user-name"></span>
             <button onclick="location.reload()">Sair</button>
         </header>
-        <div class="grid" id="galeria">
-            </div>
+        <div class="grid" id="galeria"></div>
     </div>
 
     <script src="script.js"></script>
