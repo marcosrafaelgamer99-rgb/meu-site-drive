@@ -3,36 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meu Acervo Cloud</title>
+    <title>Meu Acervo Pro</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div id="auth-screen">
         <div class="card">
-            <input type="email" id="email-l" placeholder="Email">
-            <input type="password" id="pass-l" placeholder="Senha">
-            <button onclick="processar('login')">Entrar</button>
-            <button onclick="document.getElementById('form-cad').style.display='block'">Cadastrar</button>
-            <div id="form-cad" style="display:none; margin-top:10px;">
+            <h2>Nuvem Pessoal</h2>
+            <div id="login-fields">
+                <input type="email" id="email-l" placeholder="Seu Email">
+                <input type="password" id="pass-l" placeholder="Sua Senha">
+                <button class="btn-primary" onclick="processar('login')">Entrar</button>
+                <button class="btn-link" onclick="toggleAuth(true)">Criar conta</button>
+            </div>
+            <div id="cad-fields" style="display:none">
                 <input type="text" id="nome-c" placeholder="Nome">
-                <input type="email" id="email-c" placeholder="Novo Email">
-                <input type="password" id="pass-c" placeholder="Nova Senha">
-                <button onclick="processar('cadastro')">Confirmar Cadastro</button>
+                <input type="email" id="email-c" placeholder="Email">
+                <input type="password" id="pass-c" placeholder="Senha">
+                <button class="btn-primary" onclick="processar('cadastro')">Cadastrar</button>
+                <button class="btn-link" onclick="toggleAuth(false)">Já tenho conta</button>
             </div>
         </div>
     </div>
 
     <div id="main-site" style="display:none">
         <header>
-            <h2>☁️ Nuvem Pessoal</h2>
+            <h3>Minha Nuvem</h3>
             <button onclick="sair()">Sair</button>
         </header>
-        <div class="upload-area">
-            <input type="file" id="input-arquivo" onchange="enviarArquivo()">
+        <div class="upload-section">
+            <label class="custom-upload">
+                + Adicionar Arquivo
+                <input type="file" id="input-arquivo" onchange="enviarArquivo()" hidden>
+            </label>
             <p id="status-upload"></p>
         </div>
-        <div id="galeria" class="grid"></div>
+        <div id="galeria" class="gallery-grid"></div>
     </div>
+
     <script src="script.js"></script>
 </body>
 </html>
