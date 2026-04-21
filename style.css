@@ -1,4 +1,14 @@
-/* CONFIGURAÇÕES GERAIS */
+/* --- CONFIGURAÇÃO DE CORES E FONTE --- */
+:root {
+    --fundo: #0d1117;
+    --card: #161b22;
+    --borda: #30363d;
+    --texto: #e6edf3;
+    --azul: #58a6ff;
+    --verde: #238636;
+    --vermelho: #da3633;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -6,176 +16,131 @@
 }
 
 body {
-    background-color: #0d1117; /* Preto azulado moderno */
-    color: #e6edf3;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
+    background-color: var(--fundo);
+    color: var(--texto);
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6;
 }
 
-/* TELA DE LOGIN / CADASTRO */
+/* --- TELA DE LOGIN (AUTH) --- */
 #auth-screen {
-    flex: 1;
     display: flex;
-    align-items: center;
     justify-content: center;
+    align-items: center;
+    height: 100vh;
     padding: 20px;
 }
 
 .card {
-    background: #161b22;
+    background: var(--card);
     padding: 30px;
-    border-radius: 16px;
+    border-radius: 12px;
+    border: 1px solid var(--borda);
     width: 100%;
-    max-width: 400px;
-    border: 1px solid #30363d;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    max-width: 380px;
     text-align: center;
-}
-
-h2, h3 {
-    margin-bottom: 20px;
-    font-weight: 800;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
 }
 
 input {
     width: 100%;
-    padding: 12px 16px;
-    margin: 8px 0;
-    background: #0d1117;
-    border: 1px solid #30363d;
+    padding: 12px;
+    margin: 10px 0;
+    background: var(--fundo);
+    border: 1px solid var(--borda);
     color: white;
-    border-radius: 8px;
+    border-radius: 6px;
     outline: none;
-    transition: 0.3s;
 }
 
 input:focus {
-    border-color: #58a6ff;
+    border-color: var(--azul);
 }
 
 button {
     width: 100%;
     padding: 12px;
-    margin-top: 10px;
-    border-radius: 8px;
+    border-radius: 6px;
     border: none;
     cursor: pointer;
-    font-weight: 700;
+    font-weight: bold;
+    margin-top: 10px;
     transition: 0.2s;
 }
 
-.btn-primary {
-    background: #238636; /* Verde sucesso */
-    color: white;
-}
+.btn-primary { background: var(--verde); color: white; }
+.btn-primary:hover { opacity: 0.9; }
+.btn-link { background: transparent; color: var(--azul); text-decoration: underline; }
 
-.btn-primary:hover {
-    background: #2ea043;
-}
-
-.btn-link {
-    background: transparent;
-    color: #58a6ff;
-    font-size: 14px;
-    text-decoration: underline;
-}
-
-/* TELA PRINCIPAL (PAINEL) */
+/* --- PAINEL PRINCIPAL --- */
 header {
-    background: #161b22;
+    background: var(--card);
     padding: 15px 5%;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid #30363d;
+    border-bottom: 1px solid var(--borda);
     position: sticky;
     top: 0;
-    z-index: 100;
+    z-index: 10;
 }
 
-header button {
+.btn-sair {
     width: auto;
-    padding: 8px 16px;
-    background: #da3633;
+    padding: 8px 15px;
+    background: var(--vermelho);
     color: white;
+    margin: 0;
 }
 
-/* SEÇÃO DE UPLOAD */
 .upload-section {
-    padding: 40px 20px;
     text-align: center;
-    max-width: 800px;
-    margin: 0 auto;
+    padding: 40px 20px;
 }
 
 .custom-upload {
-    background: #21262d;
-    border: 2px dashed #30363d;
-    padding: 30px;
-    border-radius: 12px;
+    background: var(--card);
+    border: 2px dashed var(--borda);
+    padding: 25px;
+    border-radius: 10px;
     cursor: pointer;
     display: inline-block;
     width: 100%;
-    max-width: 500px;
-    transition: 0.3s;
+    max-width: 400px;
 }
 
-.custom-upload:hover {
-    border-color: #58a6ff;
-    background: #262c36;
-}
+.custom-upload:hover { border-color: var(--azul); }
 
-#status-upload {
-    margin-top: 15px;
-    font-weight: bold;
-    color: #58a6ff;
-}
-
-/* GRID DA GALERIA - ONDE AS IMAGENS APARECEM */
+/* --- GALERIA (O SEGREDO PARA APARECER) --- */
 .gallery-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 20px;
     padding: 20px 5%;
-    width: 100%;
 }
 
-/* ESTILO DO CARD DE MÍDIA */
 .card-midia {
-    background: #161b22;
-    border-radius: 12px;
+    background: var(--card);
+    border-radius: 10px;
+    border: 1px solid var(--borda);
     overflow: hidden;
-    border: 1px solid #30363d;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    transition: transform 0.3s ease;
+    min-height: 250px; /* Garante que o card exista antes da imagem carregar */
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 200px; /* Garante que o card apareça mesmo se a foto demorar */
 }
 
-.card-midia:hover {
-    transform: translateY(-5px);
-}
-
-/* AJUSTE PARA A IMAGEM APARECER CORRETAMENTE */
+/* FORÇA A IMAGEM/GIF A APARECER */
 .card-midia img, .card-midia video {
     width: 100%;
-    height: 250px; /* Altura fixa para manter o padrão */
+    height: 250px;
     object-fit: cover; /* Faz a imagem preencher o espaço sem distorcer */
     display: block;
-    background: #0d1117;
+    background: #000;
 }
 
-/* RESPONSIVIDADE PARA CELULAR */
-@media (max-width: 600px) {
-    .gallery-grid {
-        grid-template-columns: 1fr; /* Uma coluna no celular */
-    }
-    
-    .card {
-        padding: 20px;
-    }
+#status-upload {
+    margin-top: 10px;
+    color: var(--azul);
+    font-weight: bold;
 }
