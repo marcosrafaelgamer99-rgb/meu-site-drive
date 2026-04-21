@@ -1,38 +1,40 @@
-// 1. O LINK DA SUA PONTE (Troque pelo seu link /exec novo)
+// 1. LINK DA SUA API (CONFIGURADO)
 const API_URL = "https://script.google.com/macros/s/AKfycbyvZ90Wg_7uvCWmyCCCtJgRmzWYM12JHZ0Hbypx6NGDJntIoFowYXLpT_kFLpDeypuN/exec";
 
-// 2. SISTEMA DE LOGIN PERSISTENTE (Não esquece o usuário)
+// 2. VERIFICAÇÃO DE LOGIN AO CARREGAR A PÁGINA
 window.onload = () => {
-    const usuarioSalvo = localStorage.getItem('user_email');
+    const usuarioSalvo = localStorage.getItem('meu_acervo_user');
     if (usuarioSalvo) {
-        entrarNoPainel();
+        entrarNoPainel(usuarioSalvo);
     }
 };
 
-function entrarNoPainel() {
+// 3. FUNÇÃO PARA ENTRAR NO PAINEL
+function entrarNoPainel(email) {
     document.getElementById('auth-screen').style.display = 'none';
     document.getElementById('main-site').style.display = 'block';
-    carregarGaleria(); // Chama as fotos assim que entra
+    console.log("Logado como:", email);
+    carregarGaleria(); // Busca as fotos assim que entra
 }
 
+// 4. FUNÇÃO PARA SAIR (LIMPAR MEMÓRIA)
 function sair() {
-    localStorage.removeItem('user_email');
+    localStorage.removeItem('meu_acervo_user');
     location.reload();
 }
 
-// 3. CARREGAR A GALERIA (Busca os dados do Apps Script)
+// 5. CARREGAR GALERIA (BUSCA NA PLANILHA)
 async function carregarGaleria() {
     const galeria = document.getElementById('galeria');
-    galeria.innerHTML = "<p style='text-align:center; color:#888;'>Sincronizando com seu Drive...</p>";
+    galeria.innerHTML = "<p style='text-align:center; color:#888;'>Sincronizando acervo...</p>";
 
     try {
-        // O fetch sem método POST aciona o doGet no Apps Script
         const res = await fetch(API_URL);
         const dados = await res.json();
         galeria.innerHTML = ""; 
 
         if (dados.length === 0) {
-            galeria.innerHTML = "<p style='text-align:center;'>Nenhuma mídia encontrada ainda.</p>";
+            galeria.innerHTML = "<p style='text-align:center; color:#888;'>Nenhuma mídia encontrada ainda.</p>";
             return;
         }
 
@@ -40,60 +42,58 @@ async function carregarGaleria() {
             const div = document.createElement('div');
             div.className = "card-midia";
             
-            // Verifica se é vídeo ou imagem
+            // Verifica se é vídeo/gif ou imagem
             if (item.tipo.includes('video')) {
                 div.innerHTML = `<video src="${item.url}" controls style="width:100%; border-radius:15px;"></video>`;
             } else {
-                div.innerHTML = `<img src="${item.url}" style="width:100%; border-radius:15px;">`;
+                div.innerHTML = `<img src="${item.url}" style="width:100%; border-radius:15px;" loading="lazy">`;
             }
             galeria.appendChild(div);
         });
     } catch (e) {
-        console.error(e);
-        galeria.innerHTML = "<p style='text-align:center; color:red;'>Erro ao carregar galeria.</p>";
+        console.error("Erro ao carregar:", e);
+        galeria.innerHTML = "<p style='text-align:center; color:red;'>Erro ao carregar mídias da planilha.</p>";
     }
 }
 
-// 4. PROCESSAR LOGIN / CADASTRO
+// 6. PROCESSAR LOGIN E CADASTRO
 function processar(acao) {
     const email = (acao === 'login') ? document.getElementById('email-l').value : document.getElementById('email-c').value;
     const senha = (acao === 'login') ? document.getElementById('pass-l').value : document.getElementById('pass-c').value;
     const nome = (acao === 'cadastro') ? document.getElementById('nome-c').value : "";
 
-    if (!email || !senha) return alert("Preencha os campos!");
+    if (!email || !senha) return alert("Por favor, preencha todos os campos.");
 
-    // Envia os dados para o doPost do Apps Script
     fetch(API_URL, {
         method: 'POST',
         mode: 'no-cors',
         body: JSON.stringify({ acao: acao, email: email, senha: senha, nome: nome })
     }).then(() => {
-        // Como no-cors não dá resposta, assumimos sucesso no envio
         if (acao === 'login') {
-            localStorage.setItem('user_email', email);
-            entrarNoPainel();
+            localStorage.setItem('meu_acervo_user', email); // Salva o login
+            entrarNoPainel(email);
         } else {
-            alert("Cadastro enviado! Tente fazer login agora.");
-            location.reload();
+            alert("Cadastro enviado! Agora você já pode fazer login.");
+            switchTab('login');
         }
-    });
+    }).catch(err => alert("Erro na conexão: " + err));
 }
 
-// 5. ENVIAR ARQUIVO (Upload direto para o Drive)
+// 7. ENVIAR ARQUIVO (UPLOAD PARA O DRIVE)
 function enviarArquivo() {
     const file = document.getElementById('input-arquivo').files[0];
     const status = document.getElementById('status-upload');
-    const email = localStorage.getItem('user_email');
+    const emailLogado = localStorage.getItem('meu_acervo_user');
 
     if (!file) return;
 
-    status.innerText = "🚀 Subindo para o Drive... aguarde.";
+    status.innerText = "🚀 Enviando para o Drive... aguarde.";
     
     const reader = new FileReader();
     reader.onload = function(e) {
         const payload = {
             acao: 'upload_direto',
-            email: email,
+            email: emailLogado,
             nomeArquivo: file.name,
             tipoMime: file.type,
             base64: e.target.result.split(',')[1]
@@ -104,14 +104,14 @@ function enviarArquivo() {
             status.innerText = "✅ Salvo com sucesso!";
             setTimeout(() => { 
                 status.innerText = ""; 
-                carregarGaleria(); // Atualiza a galeria sem dar F5
+                carregarGaleria(); // Atualiza as fotos na tela
             }, 2000);
         });
     };
     reader.readAsDataURL(file);
 }
 
-// Alternar entre Login e Cadastro
+// 8. ALTERNAR ABAS (LOGIN/CADASTRO)
 function switchTab(tipo) {
     document.getElementById('form-login').style.display = (tipo === 'login') ? 'block' : 'none';
     document.getElementById('form-cad').style.display = (tipo === 'cadastro') ? 'block' : 'none';
