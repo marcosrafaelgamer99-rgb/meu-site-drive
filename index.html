@@ -16,7 +16,7 @@
             <div id="form-login">
                 <input type="email" id="email-l" placeholder="E-mail">
                 <input type="password" id="pass-l" placeholder="Senha">
-                <button class="btn-main" onclick="processar('login')">Entrar</button>
+                <button class="btn-main" onclick="processar('login')">Acessar</button>
             </div>
             <div id="form-cad" style="display:none">
                 <input type="text" id="nome-c" placeholder="Nome">
@@ -29,30 +29,22 @@
 
     <div id="main-site" style="display:none">
         <header>
-            <h2 id="user-display">Painel</h2>
+            <h2 id="user-display">Meu Acervo</h2>
             <button class="btn-sair" onclick="location.reload()">Sair</button>
         </header>
 
         <div class="container">
-            <section class="box">
-                <h3>📝 Bloco de Notas</h3>
-                <textarea id="nota-txt" placeholder="Escreva algo..."></textarea>
-                <button class="btn-main" onclick="enviar('salvar_nota')">Salvar Nota</button>
-            </section>
-
-            <section class="box">
-                <h3>📁 Upload de Link</h3>
-                <input type="text" id="midia-link" placeholder="Link do GIF/Vídeo/Imagem">
-                <select id="midia-tipo">
-                    <option value="imagem">Imagem/GIF</option>
-                    <option value="video">Vídeo</option>
-                </select>
-                <button class="btn-main" onclick="enviar('adicionar_midia')">Postar Agora</button>
-            </section>
+            <div class="action-bar">
+                <label for="input-arquivo" class="btn-upload">
+                    <span>+ Adicionar Mídia</span>
+                    <input type="file" id="input-arquivo" accept="image/*,video/*,.gif" onchange="enviarArquivo()">
+                </label>
+                <p id="status-upload" style="margin-top:10px; font-size:12px; color:var(--p)"></p>
+            </div>
 
             <section>
-                <h3>🖼️ Minha Galeria</h3>
-                <div class="grid" id="galeria"></div>
+                <div class="grid" id="galeria">
+                    </div>
             </section>
         </div>
     </div>
