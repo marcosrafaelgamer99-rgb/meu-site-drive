@@ -1,51 +1,64 @@
-const API_URL = "https://script.google.com/macros/s/AKfycbyvZ90Wg_7uvCWmyCCCtJgRmzWYM12JHZ0Hbypx6NGDJntIoFowYXLpT_kFLpDeypuN/exec";
-let usuarioLogado = "";
+const API_URL = "TEU_LINK_AQUI_FINALIZADO_EM_EXEC";
 
-function switchTab(tipo) {
-    document.getElementById('form-login').style.display = (tipo === 'login') ? 'block' : 'none';
-    document.getElementById('form-cad').style.display = (tipo === 'cadastro') ? 'block' : 'none';
-    document.getElementById('tab-l').classList.toggle('active', tipo === 'login');
-    document.getElementById('tab-c').classList.toggle('active', tipo === 'cadastro');
+// Verifica se já está logado ao abrir
+window.onload = () => {
+    const user = localStorage.getItem('user_email');
+    if (user) {
+        mostrarPainel();
+    }
+};
+
+function switchTab(t) {
+    document.getElementById('form-login').style.display = t=='login'?'block':'none';
+    document.getElementById('form-cad').style.display = t=='cadastro'?'block':'none';
+    document.getElementById('tab-l').className = t=='login'?'active':'';
+    document.getElementById('tab-c').className = t=='cadastro'?'active':'';
 }
 
 function processar(acao) {
-    const email = (acao === 'login') ? document.getElementById('email-l').value : document.getElementById('email-c').value;
-    const senha = (acao === 'login') ? document.getElementById('pass-l').value : document.getElementById('pass-c').value;
-    const nome = (acao === 'cadastro') ? document.getElementById('nome-c').value : "";
-
-    if (!email || !senha) return alert("Preencha os campos!");
-
+    const email = acao=='login'? document.getElementById('email-l').value : document.getElementById('email-c').value;
+    const senha = acao=='login'? document.getElementById('pass-l').value : document.getElementById('pass-c').value;
+    
     fetch(API_URL, {
         method: 'POST',
         mode: 'no-cors',
-        body: JSON.stringify({ acao: acao, email: email, senha: senha, nome: nome })
+        body: JSON.stringify({acao: acao, email: email, senha: senha})
     }).then(() => {
-        alert("Enviado! Verifique sua planilha.");
-        if (acao === 'login') {
-            usuarioLogado = email;
-            document.getElementById('auth-screen').style.display = 'none';
-            document.getElementById('main-site').style.display = 'block';
+        if(acao == 'login') {
+            localStorage.setItem('user_email', email); // LEMBRA A CONTA
+            mostrarPainel();
+        } else {
+            alert("Conta criada!");
+            switchTab('login');
         }
     });
 }
 
-function enviarArquivo() {
-    const file = document.getElementById('input-arquivo').files[0];
-    const status = document.getElementById('status-upload');
-    if (!file) return;
+function mostrarPainel() {
+    document.getElementById('auth-screen').style.display = 'none';
+    document.getElementById('main-site').style.display = 'block';
+    carregarGaleria();
+}
 
-    status.innerText = "Enviando... 🚀";
-    const reader = new FileReader();
-    reader.onload = function(e) {
-        const payload = {
-            acao: 'upload_direto',
-            email: usuarioLogado,
-            nomeArquivo: file.name,
-            tipoMime: file.type,
-            base64: e.target.result.split(',')[1]
-        };
-        fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) })
-        .then(() => status.innerText = "✅ Salvo no Drive!");
-    };
-    reader.readAsDataURL(file);
+function sair() {
+    localStorage.removeItem('user_email');
+    location.reload();
+}
+
+async function carregarGaleria() {
+    const res = await fetch(API_URL);
+    const dados = await res.json();
+    const galeria = document.getElementById('galeria');
+    galeria.innerHTML = "";
+
+    dados.forEach(item => {
+        const div = document.createElement('div');
+        div.className = "card-midia";
+        if(item.tipo.includes('video')) {
+            div.innerHTML = `<video src="${item.url}" controls></video>`;
+        } else {
+            div.innerHTML = `<img src="${item.url}">`;
+        }
+        galeria.appendChild(div);
+    });
 }
